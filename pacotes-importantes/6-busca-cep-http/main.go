@@ -59,6 +59,7 @@ func BuscaCepHandler(w http.ResponseWriter, r *http.Request) {
 	// }
 	// w.Write(result)
 
+	//
 	json.NewEncoder(w).Encode(cep)
 	return
 }
