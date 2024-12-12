@@ -17,10 +17,14 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>{{curso.nome}}</td>
-                <td>{{ curso.horas }}</td>
-            </tr>
+            {{range .}}
+                {{ if eq .CargaHoraria 40}}
+                    <tr>
+                        <td>{{ .Nome }}</td>
+                        <td>{{ .CargaHoraria }}</td>
+                    </tr>
+                {{end}}
+            {{end}}
         </tbody>
     </table>
 </body>
