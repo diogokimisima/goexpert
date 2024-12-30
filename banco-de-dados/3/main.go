@@ -30,9 +30,15 @@ func main() {
 	category := Category{Name: "Eletrônicos"}
 	db.Create(&category)
 
-	db.Create(&Product{
-		Name:       "Mouse",
-		Price:      1000.00,
-		CategoryID: category.ID,
-	})
+	// db.Create(&Product{
+	// 	Name:       "Mouse",
+	// 	Price:      1000.00,
+	// 	CategoryID: category.ID,
+	// })
+
+	var products []Product
+	db.Preload("Category").Find(&products)
+	for _, product := range products {
+		println(product.Name, product.Category.Name)
+	}
 }
