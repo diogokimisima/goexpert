@@ -8,4 +8,5 @@ import "github.com/devfullcycle/11-GraphQL/internal/database"
 
 type Resolver struct {
 	CategoryDB *database.Category
+	CourseDB   *database.Course
 }

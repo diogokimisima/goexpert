@@ -10,6 +10,7 @@ type Category struct {
 }
 
 type Course struct {
+	ID          string  `json:"id"`
 	Name        string  `json:"name"`
 	Description *string `json:"description,omitempty"`
 }
@@ -20,7 +21,7 @@ type Mutation struct {
 type NewCategory struct {
 	Name        string  `json:"name"`
 	Description *string `json:"description,omitempty"`
-	CategoryID  string  `json:"categoryId"`
+	CategoryID  *string `json:"categoryId,omitempty"`
 }
 
 type NewCourse struct {
