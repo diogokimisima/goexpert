@@ -4,8 +4,6 @@ Copyright © 2025 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
 )
 
@@ -20,26 +18,37 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
+		db := GetDb()
+		category := GetCategoryDB(db)
+
 		name, _ := cmd.Flags().GetString("name")
-		fmt.Println("category called", name)
-		exists, _ := cmd.Flags().GetBool("exists")
-		fmt.Println("category exists", exists)
+		description, _ := cmd.Flags().GetString("description")
+
+		category.Create(name, description)
+
 	},
+	// Run: func(cmd *cobra.Command, args []string) {
+	// 	fmt.Println("category called with name ", category)
+	// 	name, _ := cmd.Flags().GetString("name")
+	// 	fmt.Println("category called", name)
+	// 	exists, _ := cmd.Flags().GetBool("exists")
+	// 	fmt.Println("category exists", exists)
+	// },
+	// PreRun: func(cmd *cobra.Command, args []string) {
+	// 	fmt.Println("Chamado antes do Run")
+	// },
+	// PostRun: func(cmd *cobra.Command, args []string) {
+	// 	fmt.Println("Chamado depois do Run")
+	// },
 }
 
 func init() {
 	rootCmd.AddCommand(categoryCmd)
-	categoryCmd.PersistentFlags().StringP("name", "n", "Y", "Category name")
-	categoryCmd.PersistentFlags().BoolP("exists", "e", false, "Check if category exists")
-	categoryCmd.PersistentFlags().Int16P("id", "i", 0, "Category ID")
+	createCmd.Flags().StringP("name", "n", "", "Category name")
+	createCmd.Flags().StringP("description", "n", "", "Description of the category")
+	createCmd.MarkFlagsRequiredTogether("name", "description")
+	// categoryCmd.PersistentFlags().StringVarP(&category, "name", "n", "", "Category name")
 
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// categoryCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// categoryCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// categoryCmd.PersistentFlags().BoolP("exists", "e", false, "Check if category exists")
+	// categoryCmd.PersistentFlags().Int16P("id", "i", 0, "Category ID")
 }
