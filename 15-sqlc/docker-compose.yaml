@@ -7,5 +7,5 @@ services:
       MYSQL_DATABASE: courses
       MYSQL_PASSWORD: root
     ports:
-      - "3307:3306"
+      - "3306:3306"
     
