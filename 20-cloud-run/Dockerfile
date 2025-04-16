@@ -1,7 +1,7 @@
-FROM golang:1.21-slim AS build
+FROM golang:1.24 AS build
 WORKDIR /app
 COPY . .
-RUN CGO_ENABLED=0 GOOS=linux go build -o cloudrun
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o cloudrun
 
 FROM scratch
 WORKDIR /app
