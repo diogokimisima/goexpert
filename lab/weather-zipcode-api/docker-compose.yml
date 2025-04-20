@@ -9,8 +9,7 @@ services:
       - "8080:8080"
     environment:
       - PORT=8080
-    env_file:
-      - .env
+      - WEATHER_API_KEY=81729b82816247ab84f171740252004
     networks:
       - weather-network
 
