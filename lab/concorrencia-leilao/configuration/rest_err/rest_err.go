@@ -1,4 +1,4 @@
-package resterr
+package rest_err
 
 type RestErr struct {
 	Message string   `json:"message"`
@@ -16,12 +16,12 @@ func (r *RestErr) Error() string {
 	return r.Message
 }
 
-func NewBadRequestError(message string) *RestErr {
+func NewBadRequestError(message string, causes ...Causes) *RestErr {
 	return &RestErr{
 		Message: message,
 		Err:     "bad_request",
 		Code:    400,
-		Causes:  nil,
+		Causes:  causes,
 	}
 }
 
