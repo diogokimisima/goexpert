@@ -5,7 +5,9 @@ import (
 	"time"
 
 	"github.com/diogokimisima/fullcycle-auction/internal/entity/auction_entity"
+	"github.com/diogokimisima/fullcycle-auction/internal/entity/bid_entity"
 	"github.com/diogokimisima/fullcycle-auction/internal/internal_error"
+	"github.com/diogokimisima/fullcycle-auction/internal/usecase/bid_usecase"
 )
 
 type AuctionInputDTO struct {
@@ -25,11 +27,17 @@ type AuctionOutputDTO struct {
 	TimeStamp   time.Time        `json:"time_stamp" time_format:"2006-01-02T15:04:05Z07:00"`
 }
 
+type WinningInfoOutputDTO struct {
+	Auction AuctionOutputDTO          `json:"auction"`
+	Bid     *bid_usecase.BidOutputDTO `json:"bid,omitempty"`
+}
+
 type ProductCondition int64
 type AuctionStatus int64
 
 type AuctionUseCase struct {
-	auctionRepository auction_entity.AuctionRepositoryInterface
+	auctionRepositoryInterface auction_entity.AuctionRepositoryInterface
+	bidRepositoryInterface     bid_entity.BidEntityRepository
 }
 
 func (au *AuctionUseCase) CreateAuction(
@@ -45,7 +53,7 @@ func (au *AuctionUseCase) CreateAuction(
 		return err
 	}
 
-	if err := au.auctionRepository.CreateAuction(ctx, auction); err != nil {
+	if err := au.auctionRepositoryInterface.CreateAuction(ctx, auction); err != nil {
 		return err
 	}
 

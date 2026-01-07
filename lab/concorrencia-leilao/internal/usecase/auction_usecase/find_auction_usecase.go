@@ -5,12 +5,13 @@ import (
 
 	"github.com/diogokimisima/fullcycle-auction/internal/entity/auction_entity"
 	"github.com/diogokimisima/fullcycle-auction/internal/internal_error"
+	"github.com/diogokimisima/fullcycle-auction/internal/usecase/bid_usecase"
 )
 
 func (au *AuctionUseCase) FindAuctionById(
 	ctx context.Context,
 	id string) (*AuctionOutputDTO, *internal_error.InternalError) {
-	auctionEntity, err := au.auctionRepository.FindAuctionById(ctx, id)
+	auctionEntity, err := au.auctionRepositoryInterface.FindAuctionById(ctx, id)
 	if err != nil {
 		return nil, err
 	}
@@ -33,7 +34,7 @@ func (au *AuctionUseCase) FindAuctions(
 	status AuctionStatus,
 	category, productName string) ([]AuctionOutputDTO, *internal_error.InternalError) {
 
-	auctionEntities, err := au.auctionRepository.FindAuctions(ctx,
+	auctionEntities, err := au.auctionRepositoryInterface.FindAuctions(ctx,
 		auction_entity.AuctionStatus(status),
 		category,
 		productName)
@@ -56,4 +57,44 @@ func (au *AuctionUseCase) FindAuctions(
 	}
 
 	return auctionOutputs, nil
+}
+
+func (au *AuctionUseCase) FindWinningBidByAuctionId(
+	ctx context.Context,
+	auctionId string) (*WinningInfoOutputDTO, *internal_error.InternalError) {
+	auction, err := au.auctionRepositoryInterface.FindAuctionById(ctx, auctionId)
+	if err != nil {
+		return nil, err
+	}
+
+	auctionOutputDTO := AuctionOutputDTO{
+		Id:          auction.Id,
+		ProductName: auction.ProductName,
+		Category:    auction.Category,
+		Description: auction.Description,
+		Condition:   ProductCondition(auction.Condition),
+		Status:      AuctionStatus(auction.Status),
+		TimeStamp:   auction.TimeStamp,
+	}
+
+	bidWinnig, err := au.bidRepositoryInterface.FindWinnigBidByAuctionId(ctx, auction.Id)
+	if err != nil {
+		return &WinningInfoOutputDTO{
+			Auction: auctionOutputDTO,
+			Bid:     nil,
+		}, nil
+	}
+
+	bidOutputDTO := &bid_usecase.BidOutputDTO{
+		Id:        bidWinnig.Id,
+		UserId:    bidWinnig.UserId,
+		AuctionId: bidWinnig.AuctionId,
+		Amount:    bidWinnig.Amount,
+		Timestamp: bidWinnig.Timestamp,
+	}
+
+	return &WinningInfoOutputDTO{
+		Auction: auctionOutputDTO,
+		Bid:     bidOutputDTO,
+	}, nil
 }
