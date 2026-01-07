@@ -28,7 +28,7 @@ func NewUserRepository(database *mongo.Database) *UserRepository {
 }
 
 func (ur *UserRepository) FindUserById(
-	ctx context.Context, userId string) (*user_entity.User, error) {
+	ctx context.Context, userId string) (user_entity.User, *internal_error.InternalError) {
 	filter := bson.M{"_id": userId}
 
 	var userEntityMongo UserEntityMongo
@@ -37,14 +37,14 @@ func (ur *UserRepository) FindUserById(
 		if errors.Is(err, mongo.ErrNoDocuments) {
 			errMsg := fmt.Sprintf("user with id %s not found", userId)
 			logger.Error(errMsg, mongo.ErrNoDocuments)
-			return nil, internal_error.NewNotFoundError(errMsg)
+			return user_entity.User{}, internal_error.NewNotFoundError(errMsg)
 		}
 
 		logger.Error(fmt.Sprintf("Error trying to find user by userId %s: %v", userId, err), err)
-		return nil, internal_error.NewInternalServerError(fmt.Sprintf("Error trying to find user by userId %s: %v", userId, err))
+		return user_entity.User{}, internal_error.NewInternalServerError(fmt.Sprintf("Error trying to find user by userId %s: %v", userId, err))
 	}
 
-	userEntity := &user_entity.User{
+	userEntity := user_entity.User{
 		Id:   userEntityMongo.Id,
 		Name: userEntityMongo.Name,
 	}
