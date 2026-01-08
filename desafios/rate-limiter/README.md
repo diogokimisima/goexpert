@@ -550,18 +550,6 @@ go test -v ./internal/middleware
 go test -v ./internal/storage
 ```
 
-## 📝 Licença
-
-Este projeto está sob a licença MIT.
-
-## 👤 Autor
-
-Desenvolvido como parte do desafio Go Expert.
-
-## 🤝 Contribuindo
-
-Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou pull requests.
-
 ## 📚 Referências
 
 - [Go Documentation](https://golang.org/doc/)
