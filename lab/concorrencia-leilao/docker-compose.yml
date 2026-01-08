@@ -10,6 +10,37 @@ services:
       MONGO_INITDB_DATABASE: auctions
     volumes:
       - mongodb_data:/data/db
+    networks:
+      - auction-network
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/auctions --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  auction-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: auction-api
+    ports:
+      - "8084:8080"  # Porta externa 8084 -> Porta interna 8080
+    environment:
+      MONGODB_URL: mongodb://mongodb:27017
+      MONGODB_DB: auctions
+      BATCH_INSERT_INTERVAL: 10s  # Alterado de 7m para 10 segundos
+      MAX_BATCH_SIZE: 3           # Alterado de 10 para 3
+      AUCTION_INTERVAL: 10m
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - auction-network
+    restart: on-failure
+
+networks:
+  auction-network:
+    driver: bridge
 
 volumes:
   mongodb_data:

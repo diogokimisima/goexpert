@@ -25,7 +25,7 @@ func (ar *AuctionRepository) FindAuctionById(
 	}
 
 	return &auction_entity.Auction{
-		Id:          auctionEntityMongo.id,
+		Id:          auctionEntityMongo.Id,
 		ProductName: auctionEntityMongo.ProductName,
 		Category:    auctionEntityMongo.Category,
 		Description: auctionEntityMongo.Description,
@@ -75,7 +75,7 @@ func (ar *AuctionRepository) FindAuctions(
 	var auctionEntity []auction_entity.Auction
 	for _, auctionMongo := range auctionEntityMongo {
 		auctionEntity = append(auctionEntity, auction_entity.Auction{
-			Id:          auctionMongo.id,
+			Id:          auctionMongo.Id,
 			ProductName: auctionMongo.ProductName,
 			Category:    auctionMongo.Category,
 			Description: auctionMongo.Description,

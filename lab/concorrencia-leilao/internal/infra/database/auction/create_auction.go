@@ -13,7 +13,7 @@ import (
 )
 
 type AuctionEntityMongo struct {
-	id          string                          `bson:"_id"`
+	Id          string                          `bson:"_id"`
 	ProductName string                          `bson:"product_name"`
 	Category    string                          `bson:"category"`
 	Description string                          `bson:"description"`
@@ -37,7 +37,7 @@ func (ar *AuctionRepository) CreateAuction(
 	auction *auction_entity.Auction) *internal_error.InternalError {
 
 	auctionMongo := &AuctionEntityMongo{
-		id:          auction.Id,
+		Id:          auction.Id,
 		ProductName: auction.ProductName,
 		Category:    auction.Category,
 		Description: auction.Description,
